@@ -1,0 +1,175 @@
+{% extends 'header.html' %}
+{% load static %}
+{% block title %} {{ config.SITE_NAME }} BLOG || DETAIL   {% endblock title %}
+{% block content %}
+
+
+ <section class="breadcrumb breadcrumb_bg align-items-center">
+        <div class="container">
+            <div class="row align-items-center justify-content-between">
+                <div class="col-sm-6">
+                    <div class="breadcrumb_tittle text-left">
+                        <h2>{{ object.title }}</h2>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- breadcrumb start-->
+   <!--================Blog Area =================-->
+   <section class="blog_area single-post-area all_post section_padding">
+      <div class="container">
+         <div class="row">
+            <div class="col-lg-8 posts-list">
+                <div class="single-post">
+                   <div class="feature-img">
+                      <img class="img-fluid" src="{% static 'lifeleck/img/blog/single_blog_1.png' %}" alt="">
+                   </div>
+                   <div class="blog_details">
+                       {{ object.content|safe }}
+                   </div>
+                    <form method="post" action="{% url 'blog:like_post' %}" >
+                        {% csrf_token %}
+                            {% if is_liked %}
+                                <button type="submit" name="post_id" value="{{ object.id }}" class="btn btn-success glyphicon glyphicon-thumbs-up">DisLike: {{ object.total_like }}</button>
+                            {% else %}
+                                <button type="submit" name="post_id" value="{{ object.id }}" class="btn btn-success glyphicon glyphicon-thumbs-up" >
+                                   Like: {{ object.total_like }} </button>
+                            {% endif %}
+                    </form>
+                    <div class="post-item-info no-border clearfix">
+                        <p class="post-tags">
+                            {% for i in object.tag.all %}
+                                <a href="{% url 'blog:tag_posts' i %}">{{ i.name }}</a>
+                            {% endfor %}
+                        </p>
+                    </div>
+                    <div class="related-post">
+                        <h6>RELATED POST</h6>
+                        <ul>
+                            {% for i in object.related_posts %}
+                                <li>
+                                    <a href="{{ i.get_absolute_url }}">
+                                        <span class="title">{{ i.title }}</span>
+                                    </a>
+                                    <a href="">
+                                        <span class="info">by <span
+                                                class="name">{{ i.user.get_full_name }}</span>   •   {{ i.created_at }}</span>
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+
+               <div class="comments-area">
+                  <h4>05 Comments</h4>
+                   {% for c in comment %}
+                      <div class="comment-list">
+                         <div class="single-comment justify-content-between d-flex">
+                            <div class="user justify-content-between d-flex">
+                               <div class="thumb">
+                                  <img src="{% static 'lifeleck/img/comment/comment_1.png' %}" alt="">
+                               </div>
+                               <div class="desc">
+                                  <p class="comment">{{ c.comment }}
+                                  </p>
+                                  <div class="d-flex justify-content-between">
+                                     <div class="d-flex align-items-center">
+                                        <h5>
+                                           <a href="#">{{ c.user}}</a>
+                                        </h5>
+                                        <p class="date">{{ c.created_at}} </p>
+                                     </div>
+                                  </div>
+                               </div>
+                            </div>
+                         </div>
+                      </div>
+                   {% endfor %}
+               <div class="comment-form">
+                  <h4>Leave a Reply</h4>
+                  <form class=" comment_form" method="post" action="{% url 'blog:comment_add' %}" >
+                      {% csrf_token %}
+                         <div class="row">
+                            <div class="col-12">
+                               <div class="form-group">
+                                  <textarea class="form-control w-100" name="comment"  cols="30" rows="9"
+                                     placeholder="Write Comment" required></textarea>
+                                   <input hidden  name="post"  value="{{ object.id }}"/>
+                                <input type="text" class="form-control" name="user" placeholder="Write Name" required >
+                               </div>
+                            </div>
+                         </div>
+
+                     <div class="load_btn">
+                        <button type="submit" class="btn_1">SUBMIT</button>
+                     </div>
+                  </form>
+               </div>
+            </div></div>
+            <div class="col-lg-4">
+                  <div class="sidebar_widget">
+                        <div class="single_sidebar_wiget search_form_widget">
+                              <form action="#">
+                              <div class="form-group">
+                                    <input type="text" class="form-control" placeholder='Search Keyword'
+                                          onfocus="this.placeholder = ''" onblur="this.placeholder = 'Search Keyword'">
+                                    <div class="btn_1">search</div>
+                              </div>
+                              </form>
+                        </div>
+                        <div class="single_sidebar_wiget">
+                              <div class="sidebar_tittle">
+                              <h3>Categories</h3>
+                              </div>
+                              <div class="single_catagory_item category">
+                              <ul class="list-unstyled">
+                                    {% for cate in categories %}
+                                        <li><a href="{% url 'blog:category_posts' cate %}">{{ cate.name }}</a> <span>(15)</span> </li>
+                                    {% endfor %}
+                              </ul>
+                              </div>
+                        </div>
+                        <div class="single_sidebar_wiget">
+                              <div class="sidebar_tittle">
+                              <h3>Popular Feeds</h3>
+                              </div>
+                              {% for pop in popular_blog %}
+                                <div class="single_catagory_post post_2 ">
+                                    <div class="category_post_img">
+                                        <img src="{{pop.img.url}}" >
+                                    </div>
+                                    <div class="post_text_1 pr_30">
+                                        <a href="{{ pop.get_absolute_url }}">
+                                            <h3>{{ pop.title}}</h3>
+                                        </a>
+                                        <p>{{ pop.created_at }}</p>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+
+{#                        <div class="single_sidebar_wiget">#}
+{#                              <div class="sidebar_tittle">#}
+{#                              <h3>Share this post</h3>#}
+{#                              </div>#}
+{#                              <div class="social_share_icon tags">#}
+{#                              <ul class="list-unstyled">#}
+{#                                    <li><a href="#"><i class="ti-facebook"></i></a></li>#}
+{#                                    <li><a href="#"><i class="ti-twitter-alt"></i></a></li>#}
+{#                                    <li><a href="#"><i class="ti-pinterest"></i></a></li>#}
+{#                                    <li><a href="#"><i class="ti-instagram"></i></a></li>#}
+{#                              </ul>#}
+{#                              </div>#}
+{#                        </div>#}
+                  </div>
+            </div>
+         </div>
+      </div>
+
+   </section>
+
+{% endblock content %}

@@ -1,0 +1,162 @@
+{% extends 'header.html' %}
+{% load static %}
+{% block title %} {{ config.SITE_NAME }} BLOG || CATEGORY   {% endblock title %}
+
+{% block content %}
+    <!-- banner post start-->
+    <section class="banner_post">
+        <div class="container-fluid">
+            <div class="row justify-content-between">
+                <div class="banner_post_1 banner_post_bg_1">
+                    <div class="banner_post_iner text-center">
+{#                        <a href="category.html"><h5> Fashion / Life style</h5></a> #}
+{#                        <a href="single-blog.html"><h2>All said replenish years void#}
+{#                            kind say void </h2></a> #}
+{#                        <p>Posted on April 15, 2019</p>#}
+                    </div>
+                </div>
+                <div class="banner_post_1 banner_post_bg_2">
+                    <div class="banner_post_iner text-center">
+{#                        <a href="category.html"><h5> Fashion / Life style</h5></a> #}
+{#                        <a href="single-blog.html"><h2>All said replenish years void#}
+{#                            kind say void </h2></a> #}
+{#                        <p>Posted on April 15, 2019</p>#}
+                    </div>
+                </div>
+                <div class="banner_post_1 banner_post_bg_3">
+                    <div class="banner_post_iner text-center">
+{#                        <a href="category.html"><h5> Fashion / Life style</h5></a> #}
+{#                        <a href="single-blog.html"><h2>All said replenish years void#}
+{#                            kind say void </h2></a> #}
+{#                        <p>Posted on April 15, 2019</p>#}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- banner post end-->
+
+    <!-- subscribe form start-->
+    <div class="subscribe_form padding_top margin_top">
+        <div class="container">
+            <div class="row ">
+                <div class="col-lg-12">
+                    <div class="subscribe_form_iner">
+                        <form>
+                            <div class="form-row align-items-center justify-content-center">
+                                <div class="col-md-12 col-lg-3">
+                                <h3>Subscribe
+                                        Our Newsletter</h3>
+                                </div>
+                                <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                                <input type="text" class="form-control" placeholder="Your name">
+                                </div>
+                                <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                                <input type="text" class="form-control" placeholder="Your email">
+                                </div>
+                                <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                                    <a href="#" class="btn_1">Subscribe</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- subscribe form end-->
+
+    <!-- feature_post start-->
+    <section class="all_post section_padding">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="row">
+                        {% for i in object_list %}
+                            <div class="col-lg-6 col-sm-6">
+                                <div class="single_post post_1">
+                                    <div class="single_post_img">
+                                        <img src="{{i.img.url}}" width="250" height="230" alt="">
+                                    </div>
+                                    <div class="single_post_text text-center">
+                                        <a href="category.html"><h5> {{ i.category}}</h5></a>
+                                        <a href="{{ i.get_absolute_url }}"><h2>{{ i.title|slice:":70" }}</h2></a>
+                                        <p>Posted on {{ i.created_at}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="page_pageniation">
+                        <nav aria-label="Page navigation example">
+{#                            {% if is_paginated %}#}
+{#                                <ul class="pagination justify-content-center">#}
+{#                                    {% if page_obj.has_previous %}#}
+{#                                        <li><a class="page-link" href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>#}
+{#                                    {% endif %}#}
+{#                                    {% for i in paginator.page_range %}#}
+{#                                        {% if page_obj.number == i %}#}
+{#                                            <li class="page-item"><span>{{ i }}<span class="sr-only">(current)</span></span></li>#}
+{#                                        {% else %}#}
+{#                                            <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>#}
+{#                                        {% endif %}#}
+{#                                    {% endfor %}#}
+{#                                    {% if page_obj.has_next %}#}
+{#                                        <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>#}
+{#                                    {% endif %}#}
+{#                                </ul>#}
+{#                        {% endif %}#}
+                        </nav>
+                    </div>
+
+                </div>
+                <div class="col-lg-4">
+                    <div class="sidebar_widget">
+                        <div class="single_sidebar_wiget search_form_widget">
+                            <form method="GET" action="{% url 'blog:search' %}">
+                                <div class="form-group">
+                                    <input class="form-control"  name="search" placeholder="Type of Search.." type="text" value="{{ request.GET.search }}">
+                                    <button type="submit" class="btn_1">search</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="single_sidebar_wiget">
+                            <div class="sidebar_tittle">
+                                <h3>Categories</h3>
+                            </div>
+                            <div class="single_catagory_item category">
+                                <ul class="list-unstyled">
+                                    {% for cate in categories %}
+                                    <li><a href="">{{ cate.name }}</a> <span>(15)</span> </li>
+
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="single_sidebar_wiget">
+                            <div class="sidebar_tittle">
+                                <h3>Popular Feeds</h3>
+                            </div>
+                            {% for pop in popular_blog %}
+                                <div class="single_catagory_post post_2 ">
+                                    <div class="category_post_img">
+                                        <img src="{{pop.img.url}}" >
+                                    </div>
+                                    <div class="post_text_1 pr_30">
+                                        <a href="{{ pop.get_absolute_url }}">
+                                            <h3>{{ pop.title}}</h3>
+                                        </a>
+                                        <p>{{ pop.created_at }}</p>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- feature_post end-->
+
+{% endblock content %}
